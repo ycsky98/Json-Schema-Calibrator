@@ -103,7 +103,7 @@ public class VerifyImpl {
             }
             //最小值不为空
             if (Objects.nonNull(numberSchema.getMin())){
-                if (new BigDecimal(data.toString()).compareTo(new BigDecimal(numberSchema.getMax().toString()))  == -1){
+                if (new BigDecimal(data.toString()).compareTo(new BigDecimal(numberSchema.getMin().toString()))  == -1){
                     this.errorMessage = "小于最小范围" + numberSchema.getMin();
                     throw new RuntimeException(this.errorMessage);
                 }
