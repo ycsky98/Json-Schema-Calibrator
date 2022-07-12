@@ -6,10 +6,8 @@ import org.schema.json.*;
 import org.schema.json.base.Schema;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author yangcong
@@ -138,26 +136,44 @@ public class VerifyImpl {
             }
 
             Map<String, Schema> schemaMap = objectSchema.getObj();
+
+            //拿到必传的keys
+            List<String> requireKeys = objectSchema.getKeys();
+
+            //用于检测哪些必传key没有传
+            Map<String, Boolean> hasKey = new HashMap<>();
+            //循环初始化
+            for (String key : requireKeys){
+                hasKey.put(key, false);
+            }
+
             Object parseData = null;
             for (Map.Entry<String, Schema> entry:
                  schemaMap.entrySet()) {
+
                 //将当前层级数据解析出来
                 parseData = read(data.toString()).get(entry.getKey());
 
-                //这里后续会补充是否为必填项
-                if (Objects.isNull(parseData)){
-                    //如果是非必传
-                    if (!entry.getValue().canNULL()){
-                        return true;
-                    }
-                    this.errorMessage = "当前key: " + entry.getKey() + " 为NULL";
-                    throw new RuntimeException(this.errorMessage);
+                //如果是当前对象的必传属性( 如果是必传key, 并且取到的值不为空 )
+                if (requireKeys.contains(entry.getKey()) && Objects.nonNull(parseData)){
+                    hasKey.put(entry.getKey(), true);
                 }
 
-                 //拿到key值(递归继续查找)(如果是错的就返回)
-                 if(!verifySchema(parseData, entry.getValue())){
-                     throw new RuntimeException(this.errorMessage);
-                 }
+                //防止空指针异常
+                if (Objects.nonNull(parseData)){
+                    //拿到key值(递归继续查找)(如果是错的就返回)
+                    if(!verifySchema(parseData, entry.getValue())){
+                        throw new RuntimeException(this.errorMessage);
+                    }
+                }
+
+            }
+            //检测必传key是否都传了
+            for (Map.Entry<String, Boolean> h:
+                 hasKey.entrySet()) {
+                if (!h.getValue()){
+                    throw new RuntimeException("key " + h.getKey() + " is require");
+                }
             }
             //以上校验正常返回true
             return true;
