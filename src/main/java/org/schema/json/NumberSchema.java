@@ -2,6 +2,8 @@ package org.schema.json;
 
 import org.schema.json.base.Schema;
 
+import java.math.BigDecimal;
+
 /**
  * @author yangcong
  *
@@ -14,7 +16,7 @@ public class NumberSchema extends Schema {
      */
     private String desc;
 
-    private Number[] enumVal;
+    private BigDecimal[] enumVal = new BigDecimal[10];
 
     /**
      * 允许的最小值
@@ -43,7 +45,10 @@ public class NumberSchema extends Schema {
      * @return
      */
     public NumberSchema enumVal(Number ... enumVal){
-        this.enumVal = enumVal;
+        this.enumVal = new BigDecimal[enumVal.length];
+        for (int i = 0; i < enumVal.length; i++) {
+            this.enumVal[i] = new BigDecimal(enumVal[i].toString());
+        }
         return this;
     }
 
@@ -72,8 +77,8 @@ public class NumberSchema extends Schema {
         return desc;
     }
 
-    public Number[] getEnumVal() {
-        return enumVal;
+    public BigDecimal[] getEnumVal() {
+        return this.enumVal;
     }
 
     public Number getMin() {

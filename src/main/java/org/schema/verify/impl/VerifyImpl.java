@@ -93,7 +93,7 @@ public class VerifyImpl {
             //如果有枚举值(进行校验)
             if (Objects.nonNull(numberSchema.getEnumVal())){
                 //不包含抛错
-                if(!Arrays.asList(numberSchema.getEnumVal()).contains(new BigDecimal(data.toString()).intValue())){
+                if(Arrays.asList(numberSchema.getEnumVal()).stream().filter(val -> { return val.compareTo(new BigDecimal(data.toString())) == 0;}).toList().size()  == 0){
                     this.errorMessage = "不在枚举范围";
                     throw new RuntimeException(this.errorMessage);
                 }
