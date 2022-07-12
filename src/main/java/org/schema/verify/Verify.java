@@ -1,6 +1,5 @@
 package org.schema.verify;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.schema.json.base.Schema;
 import org.schema.verify.impl.VerifyImpl;
 
