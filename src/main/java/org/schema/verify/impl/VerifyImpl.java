@@ -135,6 +135,11 @@ public class VerifyImpl {
                 throw new RuntimeException("当前数据类型 ObjectSchema 不允许为空");
             }
 
+            //如果说数据允许为空,但是数据确实为空,返回true
+            if (Objects.isNull(data)){
+                return true;
+            }
+
             Map<String, Schema> schemaMap = objectSchema.getObj();
 
             //拿到必传的keys
