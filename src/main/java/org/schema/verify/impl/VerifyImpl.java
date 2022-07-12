@@ -57,6 +57,11 @@ public class VerifyImpl {
         if (schema instanceof StringSchema){//如果是字符串类型
             StringSchema stringSchema = (StringSchema) schema;
 
+            //如果当前数据不允许为空 (必传并且数据为空)
+            if (stringSchema.canNULL() && Objects.isNull(data)){
+                throw new RuntimeException("当前数据类型 StringSchema 不允许为空");
+            }
+
             if (!(data instanceof String)){
                 throw new RuntimeException("不是StringSchema类型");
             }
@@ -78,11 +83,21 @@ public class VerifyImpl {
             return true;
         } else if (schema instanceof BoolSchema) {//如果描述是boolean类型
             BoolSchema boolSchema = (BoolSchema) schema;
+
+            //如果当前数据不允许为空 (必传并且数据为空)
+            if (boolSchema.canNULL() && Objects.isNull(data)){
+                throw new RuntimeException("当前数据类型 BooleanSchema 不允许为空");
+            }
             if (!(data instanceof Boolean))
                 throw new RuntimeException("非Boolean类型");
             return true;
         } else if (schema instanceof NumberSchema) {
             NumberSchema numberSchema = (NumberSchema) schema;
+
+            //如果当前数据不允许为空 (必传并且数据为空)
+            if (numberSchema.canNULL() && Objects.isNull(data)){
+                throw new RuntimeException("当前数据类型 NumberSchema 不允许为空");
+            }
 
             //如果不是数字
             if (!data.toString().matches("\\d+") && !data.toString().matches("\\d+\\.\\d+")) {
@@ -117,6 +132,11 @@ public class VerifyImpl {
         } else if (schema instanceof ObjectSchema) {//如果是复杂的object类型
             ObjectSchema objectSchema = (ObjectSchema) schema;
 
+            //如果当前数据不允许为空 (必传并且数据为空)
+            if (objectSchema.canNULL() && Objects.isNull(data)){
+                throw new RuntimeException("当前数据类型 ObjectSchema 不允许为空");
+            }
+
             Map<String, Schema> schemaMap = objectSchema.getObj();
             Object parseData = null;
             for (Map.Entry<String, Schema> entry:
@@ -125,10 +145,14 @@ public class VerifyImpl {
                 parseData = read(data.toString()).get(entry.getKey());
 
                 //这里后续会补充是否为必填项
-//                if (Objects.isNull(parseData)){
-//                    this.errorMessage = "当前key: " + entry.getKey() + " 为NULL";
-//                    throw new RuntimeException(this.errorMessage);
-//                }
+                if (Objects.isNull(parseData)){
+                    //如果是非必传
+                    if (!entry.getValue().canNULL()){
+                        return true;
+                    }
+                    this.errorMessage = "当前key: " + entry.getKey() + " 为NULL";
+                    throw new RuntimeException(this.errorMessage);
+                }
 
                  //拿到key值(递归继续查找)(如果是错的就返回)
                  if(!verifySchema(parseData, entry.getValue())){
@@ -139,6 +163,11 @@ public class VerifyImpl {
             return true;
         } else if (schema instanceof ArraySchema) {
             ArraySchema arraySchema = (ArraySchema) schema;
+
+            //如果当前数据不允许为空
+            if (arraySchema.canNULL() && Objects.isNull(data)){
+                throw new RuntimeException("当前数据类型 ArraySchema 不允许为空");
+            }
 
             List arr = objectMapper.readValue(data.toString(), List.class);
             for (Object obj:

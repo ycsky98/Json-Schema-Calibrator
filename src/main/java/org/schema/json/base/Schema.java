@@ -12,15 +12,16 @@ public abstract class Schema {
      * true必传
      * false非必传
      */
-    public Boolean isNULL;
+    public Boolean isNULL = false;
 
     /**
      *
      * @param flag (true 必传, false 非必传)
      * @return
      */
-    public boolean isNULL(boolean flag){
-        return this.isNULL;
+    public Schema isNULL(boolean flag){
+        this.isNULL = flag;
+        return this;
     }
 
     /**
@@ -29,6 +30,6 @@ public abstract class Schema {
      * @return (true 必传, false 非必传)
      */
     public Boolean canNULL() {
-        return isNULL;
+        return this.isNULL;
     }
 }
