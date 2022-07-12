@@ -1,5 +1,6 @@
 package org.schema.verify;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.schema.json.base.Schema;
 import org.schema.verify.impl.VerifyImpl;
 
@@ -14,9 +15,8 @@ public class Verify {
         VerifyImpl verify = new VerifyImpl(data, schema);
         try {
             return verify.verifySchema(data, schema);
-        } catch (Exception e){
-            e.printStackTrace();
-            return false;
+        } catch (JsonProcessingException e){
+            throw new RuntimeException("JSON解析出错, 请检查格式\n" + e.getMessage());
         }
     }
 }
