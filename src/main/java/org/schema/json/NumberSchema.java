@@ -16,7 +16,7 @@ public class NumberSchema extends Schema {
      */
     private String desc;
 
-    private BigDecimal[] enumVal = new BigDecimal[10];
+    private BigDecimal[] enumVal;
 
     /**
      * 允许的最小值

@@ -167,7 +167,7 @@ public class VerifyImpl {
                 //防止空指针异常
                 if (Objects.nonNull(parseData)){
                     //拿到key值(递归继续查找)(如果是错的就返回)
-                    if(!verifySchema(parseData, entry.getValue())){
+                    if(!verifySchema(this.objectMapper.writeValueAsString(parseData), entry.getValue())){
                         throw new RuntimeException(this.errorMessage);
                     }
                 }
