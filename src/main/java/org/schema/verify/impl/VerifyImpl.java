@@ -85,7 +85,9 @@ public class VerifyImpl {
             NumberSchema numberSchema = (NumberSchema) schema;
 
             //如果不是数字
-            if (!(data instanceof Number)){
+            if (!data.toString().matches("\\d+") && !data.toString().matches("\\d+\\.\\d+") && //正数
+                    !data.toString().matches("-\\d+") && !data.toString().matches("-\\d+\\.\\d+") //负数
+            ) {
                 this.errorMessage = "数据类型有误,非NumberSchema类型";
                 throw new RuntimeException(this.errorMessage);
             }
