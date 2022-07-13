@@ -2,6 +2,7 @@ package org.schema.verify.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.schema.json.*;
 import org.schema.json.base.Schema;
 
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class VerifyImpl {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
     private Schema schema;
 
@@ -55,11 +56,6 @@ public class VerifyImpl {
         if (schema instanceof StringSchema){//如果是字符串类型
             StringSchema stringSchema = (StringSchema) schema;
 
-            //如果当前数据不允许为空 (必传并且数据为空)
-            if (stringSchema.canNULL() && Objects.isNull(data)){
-                throw new RuntimeException("当前数据类型 StringSchema 不允许为空");
-            }
-
             if (!(data instanceof String)){
                 throw new RuntimeException("不是StringSchema类型");
             }
@@ -82,20 +78,11 @@ public class VerifyImpl {
         } else if (schema instanceof BoolSchema) {//如果描述是boolean类型
             BoolSchema boolSchema = (BoolSchema) schema;
 
-            //如果当前数据不允许为空 (必传并且数据为空)
-            if (boolSchema.canNULL() && Objects.isNull(data)){
-                throw new RuntimeException("当前数据类型 BooleanSchema 不允许为空");
-            }
             if (!(data instanceof Boolean))
                 throw new RuntimeException("非Boolean类型");
             return true;
         } else if (schema instanceof NumberSchema) {
             NumberSchema numberSchema = (NumberSchema) schema;
-
-            //如果当前数据不允许为空 (必传并且数据为空)
-            if (numberSchema.canNULL() && Objects.isNull(data)){
-                throw new RuntimeException("当前数据类型 NumberSchema 不允许为空");
-            }
 
             //如果不是数字
             if (!data.toString().matches("\\d+") && !data.toString().matches("\\d+\\.\\d+")) {
@@ -129,11 +116,6 @@ public class VerifyImpl {
             return true;
         } else if (schema instanceof ObjectSchema) {//如果是复杂的object类型
             ObjectSchema objectSchema = (ObjectSchema) schema;
-
-            //如果当前数据不允许为空 (必传并且数据为空)
-            if (objectSchema.canNULL() && Objects.isNull(data)){
-                throw new RuntimeException("当前数据类型 ObjectSchema 不允许为空");
-            }
 
             //如果说数据允许为空,但是数据确实为空,返回true
             if (Objects.isNull(data)){
@@ -185,11 +167,6 @@ public class VerifyImpl {
         } else if (schema instanceof ArraySchema) {
             ArraySchema arraySchema = (ArraySchema) schema;
 
-            //如果当前数据不允许为空
-            if (arraySchema.canNULL() && Objects.isNull(data)){
-                throw new RuntimeException("当前数据类型 ArraySchema 不允许为空");
-            }
-
             List arr = objectMapper.readValue(data.toString(), List.class);
             for (Object obj:
                  arr) {
@@ -198,6 +175,7 @@ public class VerifyImpl {
                     this.errorMessage = "数组内有非StringSchema类型";
                     throw new RuntimeException(this.errorMessage);
                 }
+
                 //如果不通过返回false
                 if(!verifySchema(this.objectMapper.writeValueAsString(obj), arraySchema.getSchema())){
                     throw new RuntimeException(this.errorMessage);
