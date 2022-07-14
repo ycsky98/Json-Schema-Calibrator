@@ -146,6 +146,15 @@ public class VerifyImpl {
 
                 //防止空指针异常
                 if (Objects.nonNull(parseData)){
+                    //如果是String类型(直接传,不需要做json转换)
+                    if (entry.getValue().getClass().equals(StringSchema.class)){
+                        //拿到key值(递归继续查找)(如果是错的就返回)
+                        if(!verifySchema(parseData, entry.getValue())){
+                            throw new RuntimeException(this.errorMessage);
+                        }
+                        //跳过
+                        continue;
+                    }
                     //拿到key值(递归继续查找)(如果是错的就返回)
                     if(!verifySchema(this.objectMapper.writeValueAsString(parseData), entry.getValue())){
                         throw new RuntimeException(this.errorMessage);
