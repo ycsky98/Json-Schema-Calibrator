@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.schema.json.*;
 import org.schema.json.base.Schema;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author yangcong
@@ -45,6 +45,7 @@ public class VerifyImpl {
         if (!json.startsWith("{") || !json.endsWith("}")){
             throw new RuntimeException("json Error");
         }
+
         Map<String, Object> map = objectMapper.readValue(json, Map.class);
         return map;
     }
@@ -119,11 +120,6 @@ public class VerifyImpl {
         } else if (schema instanceof ObjectSchema) {//如果是复杂的object类型
             ObjectSchema objectSchema = (ObjectSchema) schema;
 
-            //如果说数据允许为空,但是数据确实为空,返回true
-            if (Objects.isNull(data)){
-                return true;
-            }
-
             Map<String, Schema> schemaMap = objectSchema.getObj();
 
             //拿到必传的keys
@@ -172,6 +168,10 @@ public class VerifyImpl {
             List arr = objectMapper.readValue(data.toString(), List.class);
             for (Object obj:
                  arr) {
+                //如果数组里面的个别元素值为空就直接进行递归校验
+                if (Objects.isNull(obj)){
+                    throw new RuntimeException("数组有元素为空, 请检查");
+                }
                 //要区分定义为String类型,并且数组内不是String类型的情况
                 if (arraySchema.getSchema().getClass().equals(StringSchema.class) && !obj.getClass().equals(StringSchema.class)){
                     this.errorMessage = "数组内有非StringSchema类型";
