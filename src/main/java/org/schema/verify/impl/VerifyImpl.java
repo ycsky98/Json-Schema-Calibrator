@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.schema.json.*;
 import org.schema.json.base.Schema;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
