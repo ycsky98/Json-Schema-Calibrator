@@ -174,10 +174,11 @@ public class VerifyImpl {
             ArraySchema arraySchema = (ArraySchema) schema;
 
             List arr = objectMapper.readValue(data.toString(), List.class);
-if(arraySchema.getMinLength()>arr.size()||arr.size()>arraySchema.getMaxLength()){
-    this.errorMessage = "数组长度不匹配";
-    throw new RuntimeException(this.errorMessage);
-}
+
+            if (arraySchema.getMinLength() != null && arraySchema.getMaxLength() != null && (arraySchema.getMinLength() > arr.size() || arr.size() > arraySchema.getMaxLength())) {
+                this.errorMessage = "数组长度不匹配";
+                throw new RuntimeException(this.errorMessage);
+            }
 
             for (Object obj:
                  arr) {

@@ -51,16 +51,23 @@ public class ArraySchema extends Schema {
         return schema;
     }
 
-    public Schema sizeBound(int size){
+    public ArraySchema sizeBound(Integer size){
         return this.sizeBound(size,size);
     }
 
     //数组长度范围
-public Schema sizeBound(int min,int max){
-        this.maxLength=max;
-        this.minLength=min;
-        return  this;
-}
+    public ArraySchema sizeBound(Integer min, Integer max) {
+        if (min == null || max == null) {
+            throw new RuntimeException("max和min都需要指定");
+        } else if (min > max) {
+            throw new RuntimeException("max不能小于min");
+        }
+
+
+        this.maxLength = max;
+        this.minLength = min;
+        return this;
+    }
 
 
     public Integer getMaxLength() {
