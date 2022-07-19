@@ -1,9 +1,7 @@
 package test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.schema.JSON;
 import org.schema.json.base.Schema;
-import org.schema.verify.Verify;
 
 public class Demo {
 
@@ -17,11 +15,5 @@ public class Demo {
                 )
                 .attr("age", JSON.number().max(20))
                 .require("name", "age");
-
-
-
-
-
-
     }
 }
