@@ -27,7 +27,10 @@ public class VerifyImpl {
      */
     private String errorMessage;
 
-    private boolean flag;
+    /**
+     * 当前层级的key
+     */
+    private String key;
 
     public VerifyImpl(Object data, Schema schema){
         this.schema = schema;
@@ -65,21 +68,21 @@ public class VerifyImpl {
                 //不通过返回false
                 if (!str.matches(stringSchema.getRegex())){
                     this.errorMessage = "String 类型 [" + str + "] 不符合匹配规则";
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
             }
             if ((Objects.nonNull(stringSchema.getMaxLength()) && stringSchema.getMaxLength() < str.length()) ||
                     (Objects.nonNull(stringSchema.getMinLength()) && stringSchema.getMinLength() > str.length())
             ){
                 this.errorMessage = "String 类型 [" + str + "] 长度不符合规则";
-                throw new RuntimeException(this.errorMessage);
+                throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
             }
             return true;
         } else if (schema instanceof BoolSchema) {//如果描述是boolean类型
             BoolSchema boolSchema = (BoolSchema) schema;
 
             if (!(data instanceof Boolean))
-                throw new RuntimeException("非Boolean类型");
+                throw new RuntimeException("Key => " + this.key + " " + "非Boolean类型");
             return true;
         } else if (schema instanceof NumberSchema) {
             NumberSchema numberSchema = (NumberSchema) schema;
@@ -89,29 +92,31 @@ public class VerifyImpl {
                     !data.toString().matches("-\\d+") && !data.toString().matches("-\\d+\\.\\d+") //负数
             ) {
                 this.errorMessage = "数据类型有误,非NumberSchema类型";
-                throw new RuntimeException(this.errorMessage);
+                throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
             }
 
             //如果有枚举值(进行校验)
             if (Objects.nonNull(numberSchema.getEnumVal())){
                 //不包含抛错
-                if(Arrays.asList(numberSchema.getEnumVal()).stream().filter(val -> { return val.compareTo(new BigDecimal(data.toString())) == 0;}).toList().size()  == 0){
+                if(Arrays.asList(numberSchema.getEnumVal()).stream().filter(val -> {
+                    return val.compareTo(new BigDecimal(data.toString())) == 0;
+                }).toList().size()  == 0){
                     this.errorMessage = "不在枚举范围";
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
             }
             //最大值不为空
             if (Objects.nonNull(numberSchema.getMax())){
                 if (new BigDecimal(data.toString()).compareTo(new BigDecimal(numberSchema.getMax().toString()))  == 1){
                     this.errorMessage = "超过最大范围" + numberSchema.getMax();
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
             }
             //最小值不为空
             if (Objects.nonNull(numberSchema.getMin())){
                 if (new BigDecimal(data.toString()).compareTo(new BigDecimal(numberSchema.getMin().toString()))  == -1){
                     this.errorMessage = "小于最小范围" + numberSchema.getMin();
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
             }
 
@@ -145,16 +150,17 @@ public class VerifyImpl {
 
                 //防止空指针异常
                 if (Objects.nonNull(parseData)){
+                    this.key = entry.getKey();
                     //如果是Object或Arr类型(要做json转换)
                     if (entry.getValue().getClass().equals(ObjectSchema.class) || entry.getValue().getClass().equals(ArraySchema.class)){
                         //拿到key值(递归继续查找)(如果是错的就返回)
                         if(!verifySchema(this.objectMapper.writeValueAsString(parseData), entry.getValue())){
-                            throw new RuntimeException(this.errorMessage);
+                            throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                         }
                     }else {
                         //拿到key值(递归继续查找)(如果是错的就返回)
                         if(!verifySchema(parseData, entry.getValue())){
-                            throw new RuntimeException(this.errorMessage);
+                            throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                         }
                     }
 
@@ -178,17 +184,17 @@ public class VerifyImpl {
                  arr) {
                 //如果数组里面的个别元素值为空就直接进行递归校验
                 if (Objects.isNull(obj)){
-                    throw new RuntimeException("数组有元素为空, 请检查");
+                    throw new RuntimeException("Key => " + this.key + " " + "数组有元素为空, 请检查");
                 }
                 //要区分定义为String类型,并且数组内不是String类型的情况
                 if (arraySchema.getSchema().getClass().equals(StringSchema.class) && !obj.getClass().equals(StringSchema.class)){
                     this.errorMessage = "数组内有非StringSchema类型";
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
 
                 //如果不通过返回false
                 if(!verifySchema(this.objectMapper.writeValueAsString(obj), arraySchema.getSchema())){
-                    throw new RuntimeException(this.errorMessage);
+                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
             }
             return true;
