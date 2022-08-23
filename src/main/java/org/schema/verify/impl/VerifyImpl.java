@@ -77,6 +77,7 @@ public class VerifyImpl {
                 this.errorMessage = "String 类型 [" + str + "] 长度不符合规则";
                 throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
             }
+
             return true;
         } else if (schema instanceof BoolSchema) {//如果描述是boolean类型
             BoolSchema boolSchema = (BoolSchema) schema;
