@@ -60,7 +60,7 @@ public class VerifyImpl {
             StringSchema stringSchema = (StringSchema) schema;
 
             if (!(data instanceof String)){
-                throw new RuntimeException("不是StringSchema类型");
+                throw new RuntimeException("Key => " + this.key + " 不是StringSchema类型");
             }
             String str = data.toString();
             //正则不为空进行校验
@@ -184,7 +184,7 @@ public class VerifyImpl {
 
             if (arraySchema.getMinLength() != null && arraySchema.getMaxLength() != null && (arraySchema.getMinLength() > arr.size() || arr.size() > arraySchema.getMaxLength())) {
                 this.errorMessage = "数组长度不匹配";
-                throw new RuntimeException(this.errorMessage);
+                throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
             }
 
             for (Object obj:
