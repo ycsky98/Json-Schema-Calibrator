@@ -7,7 +7,7 @@ import org.schema.verify.Verify;
 public class Demo {
 
     public static void main(String[] args) {
-        String json = "{\"name\": 12, \"age\" : 30}";
+        String json = "{\"name\": \"\", \"age\" : 30}";
         Schema schema = JSON.object()
                 .attr("name", JSON.string())
                 .attr("age", JSON.number().max(30))

@@ -155,14 +155,10 @@ public class VerifyImpl {
                     //如果是Object或Arr类型(要做json转换)
                     if (entry.getValue().getClass().equals(ObjectSchema.class) || entry.getValue().getClass().equals(ArraySchema.class)){
                         //拿到key值(递归继续查找)(如果是错的就返回)
-                        if(!verifySchema(this.objectMapper.writeValueAsString(parseData), entry.getValue())){
-                            throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
-                        }
+                        verifySchema(this.objectMapper.writeValueAsString(parseData), entry.getValue());
                     }else {
                         //拿到key值(递归继续查找)(如果是错的就返回)
-                        if(!verifySchema(parseData, entry.getValue())){
-                            throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
-                        }
+                        verifySchema(parseData, entry.getValue());
                     }
 
                 }
@@ -194,15 +190,13 @@ public class VerifyImpl {
                     throw new RuntimeException("Key => " + this.key + " " + "数组有元素为空, 请检查");
                 }
                 //要区分定义为String类型,并且数组内不是String类型的情况
-                if (arraySchema.getSchema().getClass().equals(StringSchema.class) && !obj.getClass().equals(StringSchema.class)){
+                if (arraySchema.getSchema().getClass().equals(StringSchema.class) && !obj.getClass().equals(String.class)){
                     this.errorMessage = "数组内有非StringSchema类型";
                     throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
                 }
 
                 //如果不通过返回false
-                if(!verifySchema(this.objectMapper.writeValueAsString(obj), arraySchema.getSchema())){
-                    throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
-                }
+                verifySchema(this.objectMapper.writeValueAsString(obj), arraySchema.getSchema());
             }
             return true;
         }
