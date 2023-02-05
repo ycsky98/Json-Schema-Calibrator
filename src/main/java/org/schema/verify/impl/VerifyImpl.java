@@ -66,18 +66,18 @@ public class VerifyImpl {
             data = kv.getData();
             schema = kv.getSchema();
             if (schema instanceof StringSchema){//如果是字符串类型
-                return verifyStringSchema(data, schema);
+                verifyStringSchema(data, schema);
             } else if (schema instanceof BoolSchema) {//如果描述是boolean类型
-                return verifyBoolSchema(data, schema);
+                verifyBoolSchema(data, schema);
             } else if (schema instanceof NumberSchema) {//如果描述是Number类型
-                return verifyNumberSchema(data, schema);
+                verifyNumberSchema(data, schema);
             } else if (schema instanceof ObjectSchema) {//如果是复杂的object类型
-                return verifyObjectSchema(data, schema);
+                verifyObjectSchema(data, schema);
             } else if (schema instanceof ArraySchema) {//如果是复杂的Array类型
                 verifyArraySchema(data, schema);
             }
         }
-        return false;
+        return true;
     }
 
     public String getErrorMessage() {
@@ -89,9 +89,8 @@ public class VerifyImpl {
      *
      * @param data
      * @param schema
-     * @return
      */
-    public boolean verifyStringSchema(Object data, Schema schema){
+    public void verifyStringSchema(Object data, Schema schema){
         StringSchema stringSchema = (StringSchema) schema;
 
         if (!(data instanceof String)){
@@ -113,7 +112,6 @@ public class VerifyImpl {
             throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
         }
 
-        return true;
     }
 
     /**
@@ -121,14 +119,12 @@ public class VerifyImpl {
      *
      * @param data
      * @param schema
-     * @return
      */
-    public boolean verifyBoolSchema(Object data, Schema schema){
+    public void verifyBoolSchema(Object data, Schema schema){
         BoolSchema boolSchema = (BoolSchema) schema;
 
         if (!(data instanceof Boolean))
             throw new RuntimeException("Key => " + this.key + " " + "非Boolean类型");
-        return true;
     }
 
     /**
@@ -138,7 +134,7 @@ public class VerifyImpl {
      * @param schema
      * @return
      */
-    public boolean verifyNumberSchema(Object data, Schema schema){
+    public void verifyNumberSchema(Object data, Schema schema){
         NumberSchema numberSchema = (NumberSchema) schema;
 
         //如果不是数字
@@ -174,7 +170,6 @@ public class VerifyImpl {
             }
         }
 
-        return true;
     }
 
     /**
@@ -182,10 +177,9 @@ public class VerifyImpl {
      *
      * @param data
      * @param schema
-     * @return
      * @throws JsonProcessingException
      */
-    public boolean verifyObjectSchema(Object data, Schema schema) throws JsonProcessingException {
+    public void verifyObjectSchema(Object data, Schema schema) throws JsonProcessingException {
         ObjectSchema objectSchema = (ObjectSchema) schema;
 
         Map<String, Schema> schemaMap = objectSchema.getObj();
@@ -240,8 +234,6 @@ public class VerifyImpl {
                 throw new RuntimeException("key " + h.getKey() + " is require");
             }
         }
-        //以上校验正常返回true
-        return true;
     }
 
     /**
