@@ -1,5 +1,6 @@
 package org.schema.json;
 
+import org.schema.json.base.CheckType;
 import org.schema.json.base.Schema;
 
 /**
@@ -10,24 +11,35 @@ import org.schema.json.base.Schema;
 public class ArraySchema extends Schema {
 
     private String desc;
-
     private Schema schema;
     /**
      * 最大长度
      */
     private Integer maxLength = null;
-
     /**
      * 最小长度
      */
     private Integer minLength = null;
+
+    {
+        currentCheckType = CheckType.ARRAY;
+
+    }
+
+    @Override
+    public ArraySchema error(RuntimeException hintException) {
+
+        getErrorMap().put(currentCheckType, hintException);
+        return this;
+    }
+
     /**
      * 设置描述
      *
      * @param desc
      * @return
      */
-    public ArraySchema desc(String desc){
+    public ArraySchema desc(String desc) {
         this.desc = desc;
         return this;
     }
@@ -38,7 +50,7 @@ public class ArraySchema extends Schema {
      * @param schema
      * @return
      */
-    public ArraySchema item(Schema schema){
+    public ArraySchema item(Schema schema) {
         this.schema = schema;
         return this;
     }
@@ -51,12 +63,13 @@ public class ArraySchema extends Schema {
         return schema;
     }
 
-    public ArraySchema sizeBound(Integer size){
-        return this.sizeBound(size,size);
+    public ArraySchema sizeBound(Integer size) {
+        return this.sizeBound(size, size);
     }
 
     //数组长度范围
     public ArraySchema sizeBound(Integer min, Integer max) {
+        this.currentCheckType = CheckType.SIZE_BOUND;
         if (min == null || max == null) {
             throw new RuntimeException("max和min都需要指定");
         } else if (min > max) {
@@ -68,7 +81,6 @@ public class ArraySchema extends Schema {
         this.minLength = min;
         return this;
     }
-
 
     public Integer getMaxLength() {
         return maxLength;

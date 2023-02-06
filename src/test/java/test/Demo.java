@@ -2,6 +2,7 @@ package test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
 import org.schema.JSON;
 import org.schema.json.base.Schema;
 import org.schema.verify.Verify;
@@ -17,7 +18,7 @@ public class Demo {
         String json = "{\"name\": \"\", \"age\" : 30}";
         Schema schema = JSON.object()
                 .attr("name", JSON.string())
-                .attr("age", JSON.number().max(30))
+                .attr("age", JSON.number().max(20))
                 .attr("school", JSON.string())
                         .require("name", "age");
         System.out.println(Verify.verify(json, schema));
@@ -49,4 +50,26 @@ public class Demo {
 //            System.out.println(System.currentTimeMillis() - start + "ms");
 //        }
     }
+
+    @Test
+    void complexTest(){
+        String json = """
+                {
+                              
+                "aaa":{
+                "name":8848,
+                "google":"ash"
+                              
+                }
+                }""";
+        Schema schema = JSON.object().attr("aaa",JSON.object().attr("name",JSON.number().min(9966)
+                        .error(new RuntimeException("141"))
+                )
+
+        );
+        System.out.println(Verify.verify(json, schema));
+
+
+    }
+
 }

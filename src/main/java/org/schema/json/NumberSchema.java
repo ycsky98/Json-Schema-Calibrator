@@ -1,5 +1,6 @@
 package org.schema.json;
 
+import org.schema.json.base.CheckType;
 import org.schema.json.base.Schema;
 
 import java.math.BigDecimal;
@@ -15,18 +16,29 @@ public class NumberSchema extends Schema {
      * 对当前字段的描述
      */
     private String desc;
-
     private BigDecimal[] enumVal;
-
     /**
      * 允许的最小值
      */
     private Number min = null;
-
     /**
      * 允许的最大值
      */
     private Number max = null;
+
+    {
+        currentCheckType = CheckType.NUMBER;
+    }
+
+    @Override
+    public NumberSchema error(RuntimeException hintException) {
+
+        getErrorMap().put(currentCheckType, hintException);
+
+        return this;
+    }
+
+
 
     /**
      * 描述
@@ -34,30 +46,33 @@ public class NumberSchema extends Schema {
      * @param desc
      * @return
      */
-    public NumberSchema desc(String desc){
+    public NumberSchema desc(String desc) {
         this.desc = desc;
         return this;
     }
-
     /**
      * 设置key
+     *
      * @param enumVal 允许的枚举值范围(不填默认为NULL, 表示只校验是否为数字)
      * @return
      */
-    public NumberSchema enumVal(Number ... enumVal){
+    public NumberSchema enumVal(Number... enumVal) {
+        currentCheckType = CheckType.ENUM_VAL;
         this.enumVal = new BigDecimal[enumVal.length];
         for (int i = 0; i < enumVal.length; i++) {
             this.enumVal[i] = new BigDecimal(enumVal[i].toString());
         }
         return this;
     }
-
     /**
      * 最小值
+     *
      * @param min
      * @return
      */
-    public NumberSchema min(Number min){
+    public NumberSchema min(Number min) {
+        currentCheckType = CheckType.MIN;
+
         this.min = min;
         return this;
     }
@@ -68,7 +83,9 @@ public class NumberSchema extends Schema {
      * @param max
      * @return
      */
-    public NumberSchema max(Number max){
+    public NumberSchema max(Number max) {
+        currentCheckType = CheckType.MAX;
+
         this.max = max;
         return this;
     }
