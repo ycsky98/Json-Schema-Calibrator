@@ -1,5 +1,6 @@
 package org.schema.json;
 
+import org.schema.json.base.CheckType;
 import org.schema.json.base.Schema;
 
 /**
@@ -13,21 +14,29 @@ public class StringSchema extends Schema {
      * 对当前字段的描述
      */
     private String desc;
-
     /**
      * 正则表达式
      */
     private String regex;
-
     /**
      * 最大长度
      */
     private Integer maxLength = null;
-
     /**
      * 最小长度
      */
     private Integer minLength = null;
+
+    {
+        currentCheckType = CheckType.STRING;
+    }
+
+    @Override
+    public StringSchema error(RuntimeException hintException) {
+        getErrorMap().put(currentCheckType, hintException);
+
+        return this;
+    }
 
     /**
      * 描述
@@ -35,7 +44,7 @@ public class StringSchema extends Schema {
      * @param desc
      * @return
      */
-    public StringSchema desc(String desc){
+    public StringSchema desc(String desc) {
         this.desc = desc;
         return this;
     }
@@ -46,7 +55,8 @@ public class StringSchema extends Schema {
      * @param regex
      * @return
      */
-    public StringSchema regex(String regex){
+    public StringSchema regex(String regex) {
+        currentCheckType = CheckType.REGEX;
         this.regex = regex;
         return this;
     }
@@ -57,7 +67,8 @@ public class StringSchema extends Schema {
      * @param maxLength
      * @return
      */
-    public StringSchema maxLength(int maxLength){
+    public StringSchema maxLength(int maxLength) {
+        this.currentCheckType = CheckType.STRING_BOUND;
         this.maxLength = maxLength;
         return this;
     }
@@ -68,7 +79,8 @@ public class StringSchema extends Schema {
      * @param minLength
      * @return
      */
-    public StringSchema minLength(int minLength){
+    public StringSchema minLength(int minLength) {
+        this.currentCheckType = CheckType.STRING_BOUND;
         this.minLength = minLength;
         return this;
     }
@@ -88,4 +100,5 @@ public class StringSchema extends Schema {
     public Integer getMinLength() {
         return minLength;
     }
+
 }

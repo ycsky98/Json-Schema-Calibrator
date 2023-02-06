@@ -1,5 +1,6 @@
 package org.schema.json;
 
+import org.schema.json.base.CheckType;
 import org.schema.json.base.Schema;
 
 import java.util.*;
@@ -14,17 +15,27 @@ public class ObjectSchema extends Schema {
     /**
      * 存储对象属性
      */
-    private Map<String, Schema> obj = new HashMap<>();
-
+    private final Map<String, Schema> obj = new HashMap<>();
     /**
      * keys
      */
-    private List<String> keys = new ArrayList<>();
-
+    private final List<String> keys = new ArrayList<>();
     /**
      * 描述
      */
     private String desc;
+
+    {
+
+        currentCheckType = CheckType.OBJECT;
+    }
+
+    @Override
+    public ObjectSchema error(RuntimeException hintException) {
+
+        getErrorMap().put(currentCheckType, hintException);
+        return this;
+    }
 
     /**
      * 描述这个对象
@@ -32,7 +43,7 @@ public class ObjectSchema extends Schema {
      * @param desc
      * @return
      */
-    public ObjectSchema desc(String desc){
+    public ObjectSchema desc(String desc) {
         this.desc = desc;
         return this;
     }
@@ -42,7 +53,7 @@ public class ObjectSchema extends Schema {
      * @param schema
      * @return
      */
-    public ObjectSchema attr(String key, Schema schema){
+    public ObjectSchema attr(String key, Schema schema) {
         this.obj.put(key, schema);
         return this;
     }
@@ -51,10 +62,10 @@ public class ObjectSchema extends Schema {
      * 必须包含的字段
      *
      * @param keys
-     *
      * @return
      */
-    public ObjectSchema require(String ... keys){
+    public ObjectSchema require(String... keys) {
+        this.currentCheckType = CheckType.REQUIRE;
         this.keys.addAll(Arrays.asList(keys));
         return this;
     }
@@ -70,4 +81,6 @@ public class ObjectSchema extends Schema {
     public List<String> getKeys() {
         return keys;
     }
+
+
 }

@@ -14,7 +14,7 @@ public class JSON {
      *
      * @return
      */
-    public static StringSchema string(){
+    public static StringSchema string() {
         return new StringSchema();
     }
 
@@ -23,7 +23,7 @@ public class JSON {
      *
      * @return
      */
-    public static NumberSchema number(){
+    public static NumberSchema number() {
         return new NumberSchema();
     }
 
@@ -32,7 +32,7 @@ public class JSON {
      *
      * @return
      */
-    public static ArraySchema array(){
+    public static ArraySchema array() {
         return new ArraySchema();
     }
 
@@ -41,7 +41,7 @@ public class JSON {
      *
      * @return
      */
-    public static BoolSchema bool(){
+    public static BoolSchema bool() {
         return new BoolSchema();
     }
 
@@ -50,7 +50,7 @@ public class JSON {
      *
      * @return
      */
-    public static ObjectSchema object(){
+    public static ObjectSchema object() {
         return new ObjectSchema();
     }
 }
