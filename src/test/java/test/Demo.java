@@ -32,23 +32,18 @@ public class Demo {
 //        );
 //
 //        List<Map<String, Object>> list = new ArrayList<>();
-//        for (int i = 0; i < 1000; i++){
+//        for (int i = 0; i < 200; i++){
 //            final int o = i;
 //            list.add(new HashMap<>(){
 //                {
 //                    put("name", "张" + o);
-//                    put("age", 1);
+//                    put("age", 1 + o);
 //                    put("school", "大学" + o);
 //                }
 //            });
 //        }
-//
-//        for (int i = 0; i < 888; i++) {
-//            long start = System.currentTimeMillis();
-//            Verify.verify(new ObjectMapper().writeValueAsString(list), schema);
-//
-//            System.out.println(System.currentTimeMillis() - start + "ms");
-//        }
+
+//        Verify.verify(new ObjectMapper().writeValueAsString(list), schema);
     }
 
     @Test
