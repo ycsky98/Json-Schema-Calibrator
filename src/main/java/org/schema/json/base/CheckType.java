@@ -1,6 +1,9 @@
 package org.schema.json.base;
-
-//检查的类型
+/**
+ * @author ashone
+ *
+ * 检查的类型
+ */
 public enum CheckType {
 
     ARRAY, SIZE_BOUND,//数组
