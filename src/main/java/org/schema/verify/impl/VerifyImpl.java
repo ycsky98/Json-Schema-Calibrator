@@ -12,8 +12,9 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * @author yangcong
  *
+ * @author yangcong
+ * <p>
  * 校验器实现部分
  */
 public class VerifyImpl extends Verify {
