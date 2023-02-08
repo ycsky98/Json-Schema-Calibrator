@@ -11,6 +11,13 @@ import org.schema.verify.impl.VerifyImpl;
  */
 public abstract class Verify {
 
+    /**
+     * 校验数据
+     *
+     * @param data
+     * @param schema
+     * @return
+     */
     public static boolean verify(Object data, Schema schema) {
         VerifyImpl verify = new VerifyImpl(data, schema);
         try {
