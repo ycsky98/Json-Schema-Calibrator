@@ -9,7 +9,7 @@ import org.schema.verify.impl.VerifyImpl;
  *
  * 校验器
  */
-public class Verify {
+public abstract class Verify {
 
     public static boolean verify(Object data, Schema schema) {
         VerifyImpl verify = new VerifyImpl(data, schema);

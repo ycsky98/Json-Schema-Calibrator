@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.schema.json.*;
 import org.schema.json.base.CheckType;
 import org.schema.json.base.Schema;
+import org.schema.verify.Verify;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.*;
  *
  * 校验器实现部分
  */
-public class VerifyImpl {
+public class VerifyImpl extends Verify {
 
     private final ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
     /**
