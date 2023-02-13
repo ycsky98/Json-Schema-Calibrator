@@ -10,6 +10,7 @@ import org.schema.verify.Verify;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -177,7 +178,7 @@ public class VerifyImpl extends Verify {
             //不包含抛错
             if (Arrays.asList(numberSchema.getEnumVal()).stream().filter(val -> {
                 return val.compareTo(new BigDecimal(data.toString())) == 0;
-            }).toList().size() == 0) {
+            }).collect(Collectors.toList()).size() == 0) {
                 hasSpecifiedException(numberSchema, CheckType.ENUM_VAL);
 
                 this.errorMessage = "不在枚举范围";
