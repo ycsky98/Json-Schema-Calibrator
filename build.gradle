@@ -5,9 +5,9 @@ plugins {
 group 'org.schema'
 version '1.0-SNAPSHOT'
 
-jar{
-    archiveFileName = 'json-schema.jar'
-}
+//jar{
+//    archiveFileName = 'json-schema.jar'
+//}
 
 repositories {
     maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
