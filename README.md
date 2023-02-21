@@ -39,3 +39,13 @@
 
 - 如何进行Schema的描述校验
 - 通过Verify.verify(json, schema), 即可进行json的校验
+<br>
+## New Version
+#### 1.新增自定义异常
+#### 2.修改了存储方式
+
+---
+    1.如何自定义异常
+        JSON.number().min(10)
+        .error(new RuntimeException("最小长度不能为10"));
+- 剩余情况如上而定
