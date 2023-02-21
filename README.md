@@ -1,4 +1,13 @@
 # Json-Schema-Calibrator
+
+<p align="center">
+<a href="https://github.com/ycsky98/Json-Schema-Calibrator/releases"><img alt="Github Releases" src="https://img.shields.io/github/v/release/ycsky98/Json-Schema-Calibrator?include_prereleases&style=flat-square" /></a>
+<a href="https://github.com/ycsky98/Json-Schema-Calibrator/stargazers"><img alt="GitHub Stargazers" src="https://img.shields.io/github/stars/ycsky98/Json-Schema-Calibrator.svg?style=flat-square&label=Stars&logo=github" /></a>
+<a href="https://github.com/ycsky98/Json-Schema-Calibrator/issues"><img src="https://img.shields.io/github/issues/ycsky98/Json-Schema-Calibrator?color=blue&style=flat-square"/></a>
+<a href="https://github.com/ycsky98/Json-Schema-Calibrator/commits"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ycsky98/Json-Schema-Calibrator.svg?style=flat-square" /></a>
+<br />
+</p>
+
 # 基于Java的Json描述器
   项目采用的jdk版本为17
 
