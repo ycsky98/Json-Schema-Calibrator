@@ -50,7 +50,11 @@
 - 通过Verify.verify(json, schema), 即可进行json的校验
 <br>
 ## New Version
+<p>
+
 #### 1.新增自定义异常
+<p>
+
 #### 2.修改了存储方式
 
 ---
