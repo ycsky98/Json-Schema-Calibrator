@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.schema.JSON;
+import org.schema.json.ArraySchema;
+import org.schema.json.StringSchema;
 import org.schema.json.base.Schema;
 import org.schema.verify.Verify;
 
@@ -55,13 +57,16 @@ public class Demo {
                 "name":8848,
                 "google":"ash"
                               
-                }
+                },
+                "bbb":[1,2,3,5]
+                
+                
                 }""";
         Schema schema = JSON.object().attr("aaa",JSON.object().attr("name",JSON.number().min(9966)
                         .error(new RuntimeException("141"))
                 )
 
-        );
+        ).attr("bbb",JSON.array().sizeBound(141).error(new RuntimeException("喂！")));
         System.out.println(Verify.verify(json, schema));
 
 
