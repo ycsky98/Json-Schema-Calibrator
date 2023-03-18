@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ *
  * @author yangcong
  * <p>
  * 校验器实现部分
@@ -74,9 +75,26 @@ public class VerifyImpl extends Verify {
             } else if (schema instanceof NumberSchema) {//如果描述是Number类型
                 verifyNumberSchema(data, schema);
             } else if (schema instanceof ObjectSchema) {//如果是复杂的object类型
-                verifyObjectSchema(data, schema);
+
+                try {
+                    verifyObjectSchema(data, schema);
+                } catch (JsonProcessingException e) {
+                    hasSpecifiedException(schema, CheckType.ARRAY);
+                    throw e;
+                }
+
             } else if (schema instanceof ArraySchema) {//如果是复杂的Array类型
-                verifyArraySchema(data, schema);
+
+                try {
+                    verifyArraySchema(data, schema);
+
+                } catch (JsonProcessingException e) {
+                    hasSpecifiedException(schema, CheckType.ARRAY);
+                    throw e;
+
+                }
+
+
             }
         }
         return true;
@@ -93,7 +111,6 @@ public class VerifyImpl extends Verify {
      * @param schema
      */
     public void verifyStringSchema(Object data, Schema schema) {
-
         StringSchema stringSchema = (StringSchema) schema;
 
         if (!(data instanceof String)) {
