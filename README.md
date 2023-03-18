@@ -48,7 +48,9 @@
 
 - 如何进行Schema的描述校验
 - 通过Verify.verify(json, schema), 即可进行json的校验
-<br>
+
+<p>
+
 ## New Version
 <p>
 
