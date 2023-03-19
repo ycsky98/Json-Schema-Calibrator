@@ -284,9 +284,14 @@ public class VerifyImpl extends Verify {
 
         List arr = objectMapper.readValue(data.toString(), List.class);
 
-        if (arraySchema.getMinLength() != null && arraySchema.getMaxLength() != null && (arraySchema.getMinLength() > arr.size() || arr.size() > arraySchema.getMaxLength())) {
+        if (arraySchema.getMinLength() != null && arraySchema.getMinLength() > arr.size()){
             hasSpecifiedException(arraySchema, CheckType.SIZE_BOUND);
+            this.errorMessage = "数组长度不匹配";
+            throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
+        }
 
+        if (arraySchema.getMaxLength() != null && arraySchema.getMaxLength() < arr.size()){
+            hasSpecifiedException(arraySchema, CheckType.SIZE_BOUND);
             this.errorMessage = "数组长度不匹配";
             throw new RuntimeException("Key => " + this.key + " " + this.errorMessage);
         }
